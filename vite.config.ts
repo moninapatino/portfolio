@@ -95,7 +95,7 @@ function figmaSiteConfiguration(config: FigmaSiteConfiguration, base: string): P
     return html.replace(`<!-- ${slotName} -->`, content)
   }
 
-  const title = config.title ?? "Figma Make App"
+  const title = config.title ?? "Monina's Portfolio"
   const description = config.description ?? ''
   // Imported HTML keeps its own favicon. New Makes use PNG because Google Search does not
   // support SVG favicons, even though browsers do.

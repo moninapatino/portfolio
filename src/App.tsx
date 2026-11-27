@@ -43,6 +43,7 @@ const skills: { name: string; icon: IconName; items: string[] }[] = [
   { name: 'Development & Cloud', icon: 'code', items: ['HTML/CSS & JavaScript', 'Mobile & Web App Development', 'Docker / Docker Compose', 'Firebase & AWS Serverless'] },
   { name: 'Systems & Databases', icon: 'database', items: ['SQL', 'Windows Server', 'VirtualBox', 'Git'] },
   { name: 'Productivity & Tools', icon: 'tools', items: ['Microsoft Office Suite', 'Google Workspace', 'Canva', 'Reaper'] },
+  { name: 'AI Tools', icon: 'code', items: ['Claude', 'VS Code AI', 'ChatGPT', 'DeepSeek'] },
 ];
 
 const experience = [
@@ -139,7 +140,7 @@ function App() {
 
         <section id="skills" className="mx-auto max-w-6xl scroll-mt-8 px-6 py-16 lg:px-10 lg:py-20">
           <SectionHeading number="02" title="Technical toolkit" subtitle="SKILLS & CAPABILITIES" />
-          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-5">
             {skills.map(skill => <div key={skill.name} className="min-w-0 border-t border-slate-200 pt-6"><div className="mb-5 flex h-10 w-10 items-center justify-center rounded-lg border border-blue-100 bg-blue-50 text-blue-600"><Icon name={skill.icon} /></div><h3 className="mb-4 text-base font-semibold tracking-tight">{skill.name}</h3><ul className="space-y-2.5">{skill.items.map(item => <li key={item} className="text-sm leading-6 text-slate-600">{item}</li>)}</ul></div>)}
           </div>
         </section>
