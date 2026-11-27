@@ -4,16 +4,24 @@ import tailwindcss from '@tailwindcss/vite'
 import fs from 'node:fs'
 import path from 'node:path'
 
-import siteConfiguration from './.figma/make/site.json'
+const siteConfigurationPath = path.resolve(import.meta.dirname, './.figma/make/site.json')
+const siteConfiguration: FigmaSiteConfiguration = fs.existsSync(siteConfigurationPath)
+  ? JSON.parse(fs.readFileSync(siteConfigurationPath, 'utf8'))
+  : {}
 
 
 // Vite config — https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // .figma/make/deploy-preview passes `--mode development` for cached-preview builds.
   const emitSourcemaps = mode === 'development'
+  const base = process.env.GITHUB_PAGES === 'true'
+    ? '/portfolio/'
+    : process.env.FIGMA_PUBLIC_URL
+      ? `${process.env.FIGMA_PUBLIC_URL}/`
+      : '/'
 
   return {
-    base: process.env.FIGMA_PUBLIC_URL ? `${process.env.FIGMA_PUBLIC_URL}/` : '/',
+    base,
     build: {
       sourcemap: emitSourcemaps ? 'inline' : false,
       minify: !emitSourcemaps,
@@ -21,7 +29,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
 react(),
       tailwindcss(),
-      figmaSiteConfiguration(siteConfiguration),
+      figmaSiteConfiguration(siteConfiguration, base),
       figmaErrorOverlayReplay(),
       figmaReactRefreshBoundaryFallback(),
       figmaMakeKitPlugin({ storiesGlob: '/src/**/*.stories.{ts,tsx,js,jsx}' }),
@@ -29,7 +37,7 @@ react(),
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src'),
+        '@': path.resolve(import.meta.dirname, './src'),
       },
     },
     server: {
@@ -76,7 +84,7 @@ type FigmaSiteConfiguration = {
 }
 
 /** Applies /.figma/make/site.json to the generated document shell. */
-function figmaSiteConfiguration(config: FigmaSiteConfiguration): Plugin {
+function figmaSiteConfiguration(config: FigmaSiteConfiguration, base: string): Plugin {
   function sanitizeHtmlValue(value: string | undefined): string {
     return value?.replace(/[^a-zA-Z0-9_-]/g, '') || ''
   }
@@ -91,7 +99,10 @@ function figmaSiteConfiguration(config: FigmaSiteConfiguration): Plugin {
   const description = config.description ?? ''
   // Imported HTML keeps its own favicon. New Makes use PNG because Google Search does not
   // support SVG favicons, even though browsers do.
-  const favicon = config.icons?.icon ?? '/favicon.png'
+  const configuredFavicon = config.icons?.icon ?? '/favicon.png'
+  const favicon = configuredFavicon.startsWith('/')
+    ? `${base}${configuredFavicon.replace(/^\/+/, '')}`
+    : configuredFavicon
   const socialImage = config.openGraph?.image ?? ''
   const language = sanitizeHtmlValue(config.language) || 'en'
   const googleAnalyticsId = sanitizeHtmlValue(config.analytics?.googleAnalyticsId)
@@ -397,9 +408,9 @@ function figmaMakeKitPlugin(options: { storiesGlob: string | string[] }): Plugin
  * path, such as `libraries/<name>/`.
  */
 function figmaLinkedPackageSourcemaps(): Plugin {
-  const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf8'))
+  const packageJson = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, 'package.json'), 'utf8'))
   const linkedPackages = Object.keys({ ...packageJson.dependencies, ...packageJson.devDependencies }).flatMap((name) => {
-    const installedDir = path.resolve(__dirname, 'node_modules', name)
+    const installedDir = path.resolve(import.meta.dirname, 'node_modules', name)
     try {
       const realDir = fs.realpathSync(installedDir)
       return realDir.split(path.sep).includes('node_modules') ? [] : [{ installedDir, realDir }]

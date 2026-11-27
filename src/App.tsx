@@ -55,10 +55,10 @@ const experience = [
 function ProjectArt({ kind }: { kind: string }) {
   const [imageFailed, setImageFailed] = useState(false);
   const screenshots: Record<string, { src: string; name: string; alt: string }> = {
-    community: { src: '/images/kabarangayconnect.png', name: 'KaBarangayConnect', alt: 'KaBarangayConnect admin dashboard showing incidents, document requests, and user activity' },
-    security: { src: '/images/motorph.png', name: 'MotorPH', alt: 'MotorPH employee portal, employee information, payroll, and leave management screens' },
-    food: { src: '/images/tray-tayo.png', name: 'Tray Tayo', alt: 'Tray Tayo fried chicken product page with serving size, quantity selection, and add-to-cart action' },
-    consulting: { src: '/images/finmark.png', name: 'FinMark', alt: 'FinMark admin dashboard showing consulting services, subscriptions, orders, and pending approvals' },
+    community: { src: `${import.meta.env.BASE_URL}images/kabarangayconnect.png`, name: 'KaBarangayConnect', alt: 'KaBarangayConnect admin dashboard showing incidents, document requests, and user activity' },
+    security: { src: `${import.meta.env.BASE_URL}images/motorph.png`, name: 'MotorPH', alt: 'MotorPH employee portal, employee information, payroll, and leave management screens' },
+    food: { src: `${import.meta.env.BASE_URL}images/tray-tayo.png`, name: 'Tray Tayo', alt: 'Tray Tayo fried chicken product page with serving size, quantity selection, and add-to-cart action' },
+    consulting: { src: `${import.meta.env.BASE_URL}images/finmark.png`, name: 'FinMark', alt: 'FinMark admin dashboard showing consulting services, subscriptions, orders, and pending approvals' },
   };
   const screenshot = screenshots[kind];
   if (screenshot) {
@@ -107,7 +107,7 @@ function App() {
               <h1 className="text-[52px] leading-[1.08] font-semibold tracking-[-0.065em] sm:text-6xl lg:text-[86px]">Monina Angela<br />Patiño<span className="text-blue-600">.</span></h1>
             </div>
             <div className="w-52 rounded-[2rem] border border-slate-200 bg-blue-50 p-3 md:w-full">
-              {portraitFailed ? <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-3xl bg-blue-100"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2" className="h-16 w-16 shrink-0 text-blue-700" role="img" aria-label="Portrait unavailable"><circle cx="32" cy="23" r="11" /><path d="M10 58a22 22 0 0 1 44 0" /></svg><span className="text-sm text-slate-600">Monina Patiño</span></div> : <img src="/images/monina-patino.png" alt="Monina Angela Patiño" width="385" height="378" onError={() => setPortraitFailed(true)} className="aspect-square w-full rounded-3xl object-cover" />}
+              {portraitFailed ? <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-3xl bg-blue-100"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2" className="h-16 w-16 shrink-0 text-blue-700" role="img" aria-label="Portrait unavailable"><circle cx="32" cy="23" r="11" /><path d="M10 58a22 22 0 0 1 44 0" /></svg><span className="text-sm text-slate-600">Monina Patiño</span></div> : <img src={`${import.meta.env.BASE_URL}images/monina-patino.png`} alt="Monina Angela Patiño" width="385" height="378" onError={() => setPortraitFailed(true)} className="aspect-square w-full rounded-3xl object-cover" />}
             </div>
           </div>
           <p className="mt-7 max-w-2xl text-base leading-7 font-medium text-slate-900">BS Information Technology Major in Software Development<span className="block font-normal text-slate-600">Mapúa Malayan Digital Colleges</span></p>
